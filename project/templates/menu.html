@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Food - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fdfdfd;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .category:hover {
+            transform: scale(1.05);
+        }
+
+        .category img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .category h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .back-button {
+            display: block;
+            width: fit-content;
+            margin: 3rem auto 1rem;
+            padding: 10px 20px;
+            background-color: #c0392b;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #a93226;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to FastFood Express</h1>
+        <p>Select a Category to Start Ordering</p>
+    </header>
+
+    <div class="container">
+        <div class="category-grid">
+            <div class="category" data-href="{{ url_for('burgers') }}">
+                <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Burgers">
+                <h3>Burgers</h3>
+            </div>
+
+            <div class="category" data-href="{{ url_for('pizza') }}">
+                <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="Pizza">
+                <h3>Pizza</h3>
+            </div>
+
+            <div class="category" data-href="{{ url_for('drinks') }}">
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Drinks">
+                <h3>Drinks</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+
+    <!-- JavaScript to handle category clicks -->
+    <script>
+        document.querySelectorAll('.category').forEach(function (div) {
+            div.addEventListener('click', function () {
+                const target = div.getAttribute('data-href');
+                if (target) {
+                    window.location.href = target;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

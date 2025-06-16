@@ -1,0 +1,103 @@
+<!-- drinks.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drinks Menu - Rest to Rant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #d4fc79, #96e6a1);
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #27ae60;
+            margin-bottom: 2rem;
+        }
+
+        .drink-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .drink-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .drink-card:hover {
+            transform: scale(1.05);
+        }
+
+        .drink-card h2 {
+            color: #16a085;
+            margin-bottom: 1rem;
+        }
+
+        .drink-card p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .order-btn:hover {
+            background-color: #1e8449;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🥤 Drinks Menu</h1>
+    <div class="drink-container">
+        <div class="drink-card">
+            <h2>Coke</h2>
+            <p>Chilled Coca-Cola for a refreshing boost.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="drink-card">
+            <h2>Iced Tea</h2>
+            <p>Sweet and cool lemon-flavored iced tea.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="drink-card">
+            <h2>Bottled Water</h2>
+            <p>Clean, crisp bottled drinking water.</p>
+            <button class="order-btn">Order</button>
+        </div>
+    </div>
+
+    <a href="{{ url_for('menu') }}" class="back-link">← Back to Ordering</a>
+</body>
+</html>

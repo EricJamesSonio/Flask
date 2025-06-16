@@ -1,0 +1,103 @@
+<!-- burger.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Burger Menu - Rest to Rant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            margin-bottom: 2rem;
+        }
+
+        .burger-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .burger-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .burger-card:hover {
+            transform: scale(1.05);
+        }
+
+        .burger-card h2 {
+            color: #d35400;
+            margin-bottom: 1rem;
+        }
+
+        .burger-card p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .order-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍔 Burger Menu</h1>
+    <div class="burger-container">
+        <div class="burger-card">
+            <h2>Cheese Burger</h2>
+            <p>Classic beef patty with melted cheese, lettuce, and tomato.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="burger-card">
+            <h2>Spicy Burger</h2>
+            <p>Fiery hot patty with jalapeños, spicy sauce, and crispy onions.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="burger-card">
+            <h2>Overload Burger</h2>
+            <p>Double patties, bacon, cheese, egg, and everything in between.</p>
+            <button class="order-btn">Order</button>
+        </div>
+    </div>
+
+    <a href="{{ url_for('menu') }}" class="back-link">← Back to Ordering</a>
+</body>
+</html>
