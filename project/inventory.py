@@ -6,37 +6,46 @@ class Inventory:
         self.db_session = db_session
 
     def add_item(self, item: ProductItem):
-        self.db_session.add(item)
-        self.db_session.commit()
-        print(f"Successfully Added Item : {item}")
+        try:
+            existing_item = ProductItem.query.filter_by(
+                name=item.name, category=item.category
+            ).first()
+
+            if existing_item:
+                if not hasattr(existing_item, "quantity") or not hasattr(
+                    item, "quantity"
+                ):
+                    print("❌ Item exists but lacks 'quantity' attribute.")
+                    return
+
+                existing_item.quantity += item.quantity
+                self.db_session.commit()
+                print(f"✅ Successfully added stock to existing item: {existing_item}")
+                return
+
+            self.db_session.add(item)
+            self.db_session.commit()
+            print(f"✅ Successfully added new item: {item}")
+
+        except Exception as e:
+            print(f"❌ Failed to add item: {e}")
 
     def reduce_stock(self, item_id, amount):
         item = ProductItem.query.get(item_id)
-        if item:
-            if hasattr(item, "quantity"):
-                item.quantity -= amount
-                self.db_session.commit()
-                print(f"Successfully Updated Item : {item}")
-                if item.quantity <= 0:
-                    self.db_session.delete(item)
-                    self.db_session.commit()
-                    print("Deleted Item, Reason : Quantity = 0")
-            else:
-                print("Doesn't have Quanttiy Attribute")
-        else:
-            print("Not Successful")
+        if not item:
+            print("Doesnt exist")
+            return
 
-    def increase_stock(self, item_id, amount):
-        item = ProductItem.query.get(item_id)
-        if item:
-            if hasattr(item, "quantity"):
-                item.quantity += amount
-                self.db_session.commit()
-                print(f"Successfully Increase Amount {item}")
-            else:
-                print("Doesn't have Quantity Attribute")
-        else:
-            print(f"Item with Id : {item_id} doesn't exist")
+        if not hasattr(item, "quantity"):
+            print("No attributes ")
+            return
+
+        try:
+            item.quantity -= amount
+            self.db_session.commit()
+            print("Successfully Reduced stock")
+        except Exception as e:
+            print(f"Failed to reduce stock {e}")
 
     def increase_stock(self, item_id, amount):
         item = ProductItem.query.get(item_id)
@@ -54,3 +63,11 @@ class Inventory:
             print("Successfully !")
         except Exception as e:
             print(f"Error exception Failed {e}")
+
+    def show_all_items(self):
+        items = ProductItem.query.all()
+        print("\n📦 Inventory Items:")
+        for item in items:
+            print(
+                f"- ID: {item.id} | Name: {item.name} | Type: {item.type} | Qty: {item.quantity} | Category: {item.category} | Price: ₱{item.price}"
+            )

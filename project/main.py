@@ -1,13 +1,12 @@
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
-import config
-
+from config import *
+from models import db
 
 app = Flask(__name__)
 
-app.config.from_object(config)
+app.config.from_object("config")
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 
 @app.route("/")  # this is the default display when the page is run

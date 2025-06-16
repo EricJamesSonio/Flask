@@ -9,6 +9,8 @@ class ProductItem(db.Model):
     name = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(50))
     price = db.Column(db.Float, nullable=False)
+    quantity = db.Column(db.Integer, default=0)
+    type = db.Column(db.String(50))
 
     __mapper_args__ = {
         "polymorphic_identity": "product_item",
@@ -41,3 +43,27 @@ class CheeseBurger(Burger):
 
     def __repr__(self):
         return f"Cheese Burger : {self.name}"
+
+
+class SpicyBurger(Burger):
+    __tablename__ = "spicyburgers"
+    id = db.Column(db.Integer, db.ForeignKey("burgers.id"), primary_key=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "spicyburger",
+    }
+
+    def __repr__(self):
+        return f"Spicy Burger : {self.name}"
+
+
+class OverloadBurger(Burger):
+    __tablename__ = "overloadburgers"
+    id = db.Column(db.Integer, db.ForeignKey("burgers.id"), primary_key=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "overloadburger",
+    }
+
+    def __repr__(self):
+        return f"Overload Burger : {self.name}"
