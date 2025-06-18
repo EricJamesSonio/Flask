@@ -18,9 +18,10 @@ class OrderItem(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.String, db.ForeignKey("customers.id"), nullable=False)
+    # customer_id = db.Column(db.String, db.ForeignKey("customers.id"), nullable=False) Remove this since i change my mind lol
     orders = db.relationship("OrderItem", backref="orderitem", lazy=True)
     created_time = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    order_code = db.Column(db.String(20), nullable=False)
 
     __mapper_args__ = {"polymorphic_identity": "order"}
 

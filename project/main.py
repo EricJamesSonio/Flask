@@ -1,12 +1,15 @@
 from flask import Flask, render_template
 from config import *  # contains DB config
 from extension import db
-from models import *  # important: ensure your models are imported here
+from model.product import *
+from api.product import product_bp
 
 app = Flask(__name__)
 app.config.from_object("config")
 
 db.init_app(app)
+
+app.register_blueprint(product_bp)
 
 
 @app.route("/")
@@ -21,17 +24,22 @@ def menu():
 
 @app.route("/menu/burgers")
 def burgers():
-    return render_template("burgers.html")
+    return render_template("category/burgers.html")
 
 
 @app.route("/menu/pizza")
 def pizza():
-    return render_template("pizza.html")
+    return render_template("category/pizza.html")
 
 
 @app.route("/menu/drinks")
 def drinks():
-    return render_template("drinks.html")
+    return render_template("category/drinks.html")
+
+
+@app.route("/menu/apiproduct")
+def apiproduct():
+    return render_template("api/apiproduct.html")
 
 
 # Create tables once at startup

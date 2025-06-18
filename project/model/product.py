@@ -1,6 +1,7 @@
 from datetime import datetime
+from sqlalchemy.sql import func
 from extension import db
-from supplier import Supplier
+from model.supplier import Supplier
 
 
 class ProductItem(db.Model):
@@ -12,8 +13,8 @@ class ProductItem(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, default=0)
     type = db.Column(db.String(50))  # polymorphic discriminator
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, server_default=func.now())
+    updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
     __mapper_args__ = {
         "polymorphic_identity": "productitem",

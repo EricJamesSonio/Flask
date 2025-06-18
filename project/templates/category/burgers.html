@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Burger Menu - Rest to Rant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            margin-bottom: 2rem;
+        }
+
+        .burger-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .burger-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .burger-card:hover {
+            transform: scale(1.05);
+        }
+
+        .burger-card h2 {
+            color: #d35400;
+            margin-bottom: 1rem;
+        }
+
+        .burger-card p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .order-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+        }
+
+        .modal-content input[type="number"] {
+            width: 60px;
+            padding: 0.4rem;
+            font-size: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .modal-content .confirm-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .modal-content .confirm-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .close-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .close-btn:hover {
+            background-color: #c0392b;
+        }
+
+    .cart-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 999;
+}
+
+.cart-btn:hover {
+    background-color: #c0392b;
+}
+
+    </style>
+</head>
+
+<body>
+    <h1>🍔 Burger Menu</h1>
+    <div class="burger-container">
+        <div class="burger-card" data-name="Cheese Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
+            <h2>Cheese Burger</h2>
+            <p>Classic beef patty with melted cheese, lettuce, and tomato.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="burger-card" data-name="Spicy Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
+            <h2>Spicy Burger</h2>
+            <p>Fiery hot patty with jalapeños, spicy sauce, and crispy onions.</p>
+            <button class="order-btn">Order</button>
+        </div>
+        <div class="burger-card" data-name="Overload Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
+            <h2>Overload Burger</h2>
+            <p>Double patties, bacon, cheese, egg, and everything in between.</p>
+            <button class="order-btn">Order</button>
+        </div>
+    </div>
+
+    <a href="{{ url_for('menu') }}" class="back-link">← Back to Ordering</a>
+
+    <!-- Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Burger">
+            <h2 id="modalTitle">Burger Name</h2>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" min="1" value="1">
+            <br>
+            <button class="confirm-btn" onclick="addToCart()">Add to Order</button>
+            <button class="close-btn">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+    // Modal references
+    const orderButtons = document.querySelectorAll('.order-btn');
+    const modal = document.getElementById('orderModal') || document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle') || document.getElementById('itemName');
+    const modalImage = document.getElementById('modalImage') || document.getElementById('itemImage');
+    const quantityInput = document.getElementById('quantity');
+    const closeBtn = document.querySelector('.close-btn');
+
+    // Open modal on button click
+    orderButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const card = button.closest('.burger-card');
+            const name = card.getAttribute('data-name');
+            const img = card.getAttribute('data-img') || getImageForItem(name);
+
+            modalTitle.textContent = name;
+            modalImage.src = img;
+            quantityInput.value = 1;
+
+            modal.style.display = 'flex';
+        });
+    });
+
+    // Close modal via button
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Add to cart
+    function addToCart() {
+        const itemName = modalTitle.textContent;
+        const quantity = parseInt(quantityInput.value) || 1;
+        const imageSrc = modalImage.src;
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const index = cart.findIndex(item => item.name === itemName);
+
+        if (index !== -1) {
+            cart[index].quantity += quantity;
+        } else {
+            cart.push({ name: itemName, quantity: quantity, image: imageSrc });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        modal.style.display = 'none';
+        updateCartCount();
+    }
+
+    // Update cart count
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        document.getElementById("cart-count").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    // Get default image for item
+    function getImageForItem(itemName) {
+        switch(itemName) {
+            case "Cheese Burger":
+                return "static/images/cheeseburger.jpg";
+            case "Spicy Burger":
+                return "static/images/spicyburger.jpg";
+            case "Overload Burger":
+                return "static/images/overloadburger.jpg";
+            default:
+                return "static/images/default-burger.jpg";
+        }
+    }
+    try {
+  localStorage.setItem("cart", JSON.stringify(cart));
+} catch (e) {
+  console.error("Could not save cart:", e);
+}
+
+    // Initialize on page load
+    updateCartCount();
+</script>
+
+<a href="/cart" class="cart-btn">
+    🛒 Cart (<span id="cart-count">0</span>)
+</a>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from models import ProductItem
+from project.model.product import ProductItem
 
 
 class Inventory:
