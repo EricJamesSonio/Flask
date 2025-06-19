@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from config import *  # contains DB config
 from extension import db
 from model.product import *
-from api.product import product_bp
+from bp.product import product_bp
 
 app = Flask(__name__)
 app.config.from_object("config")
@@ -39,7 +39,7 @@ def drinks():
 
 @app.route("/menu/apiproduct")
 def apiproduct():
-    return render_template("api/apiproduct.html")
+    return render_template("apife/apiproduct.html")
 
 
 # Create tables once at startup

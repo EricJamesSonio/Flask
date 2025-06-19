@@ -167,23 +167,10 @@
 
 <body>
     <h1>🍔 Burger Menu</h1>
-    <div class="burger-container">
-        <div class="burger-card" data-name="Cheese Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
-            <h2>Cheese Burger</h2>
-            <p>Classic beef patty with melted cheese, lettuce, and tomato.</p>
-            <button class="order-btn">Order</button>
-        </div>
-        <div class="burger-card" data-name="Spicy Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
-            <h2>Spicy Burger</h2>
-            <p>Fiery hot patty with jalapeños, spicy sauce, and crispy onions.</p>
-            <button class="order-btn">Order</button>
-        </div>
-        <div class="burger-card" data-name="Overload Burger" data-img="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
-            <h2>Overload Burger</h2>
-            <p>Double patties, bacon, cheese, egg, and everything in between.</p>
-            <button class="order-btn">Order</button>
-        </div>
-    </div>
+    <div class="burger-container" id="burgerContainer">
+    <!-- Burgers will be loaded here -->
+</div>
+
 
     <a href="{{ url_for('menu') }}" class="back-link">← Back to Ordering</a>
 
@@ -285,6 +272,55 @@
 
     // Initialize on page load
     updateCartCount();
+
+    function getImageForItem(name) {
+    // Optional: You can use name-to-image mapping here
+    return "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
+}
+
+function attachOrderEvents() {
+    const orderButtons = document.querySelectorAll('.order-btn');
+    orderButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const card = button.closest('.burger-card');
+            const name = card.getAttribute('data-name');
+            const img = card.getAttribute('data-img') || getImageForItem(name);
+
+            modalTitle.textContent = name;
+            modalImage.src = img;
+            quantityInput.value = 1;
+            modal.style.display = 'flex';
+        });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/api/products/filter?type=burgers")
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById("burgerContainer");
+            container.innerHTML = "";
+
+            data.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "burger-card";
+                card.setAttribute("data-name", item.name);
+                card.setAttribute("data-img", getImageForItem(item.name));
+
+                card.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p>${item.description || "Delicious burger!"}</p>
+                    <p><strong>₱${item.price.toFixed(2)}</strong></p>
+                    <button class="order-btn">Order</button>
+                `;
+
+                container.appendChild(card);
+            });
+
+            attachOrderEvents(); // Re-bind after rendering
+        })
+        .catch(error => console.error("Error fetching burgers:", error));
+});
 </script>
 
 <a href="/cart" class="cart-btn">
